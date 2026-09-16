@@ -52,7 +52,7 @@ Unknown fixture codes render the room-not-found state. Set `VITE_CPL_POLL_INTERV
 
 ## Contract boundary
 
-- `src/api/contract.ts` mirrors the producer's exact public response.
+- `src/api/contract.ts` is the typed public response for `GET /api/rooms/:roomCode/public-feed`.
 - `src/api/adapter.ts` validates the response and maps it to the UI-owned model.
 - `src/api/client.ts` owns the endpoint, `no-store` request behavior, error mapping, and fixture/live selection.
 - `src/hooks/useRoomFeed.ts` owns polling, cancellation, manual retries, and stale-data preservation.

@@ -118,4 +118,50 @@ describe('fetchRoomFeed', () => {
       code: 'invalid-response',
     })
   })
+
+  // A success envelope on a non-2xx response is a transport failure.
+  it('rejects non-2xx responses even when the body looks valid', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ok: true,
+          feed: {
+            code: 'LIVE24',
+            name: 'Unavailable Auction',
+            phase: 'auction',
+            version: 1,
+            serverTime: 1_789_531_664_554,
+            currentAuction: null,
+            teams: [],
+            latestEvent: null,
+            results: null,
+          },
+        }),
+        { status: 500 },
+      ),
+    )
+
+    await expect(
+      fetchRoomFeed('LIVE24', { fixtureMode: false, fetchImpl }),
+    ).rejects.toMatchObject<Partial<FeedError>>({
+      code: 'http-error',
+      status: 500,
+    })
+  })
+
+  it('surfaces the producer error envelope for non-404 failures', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ ok: false, error: 'Room is not open.' }), {
+        status: 409,
+      }),
+    )
+
+    await expect(
+      fetchRoomFeed('LIVE24', { fixtureMode: false, fetchImpl }),
+    ).rejects.toMatchObject<Partial<FeedError>>({
+      code: 'producer-error',
+      message: 'Room is not open.',
+      status: 409,
+    })
+  })
 })

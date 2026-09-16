@@ -1,3 +1,4 @@
+// Public producer response for GET /api/rooms/:roomCode/public-feed.
 export type PublicRoomPhase = 'waiting' | 'quiz' | 'auction' | 'results'
 export type PublicPlayerRole = 'BAT' | 'BOWL' | 'AR' | 'WK'
 export type PublicAuctionState = 'idle' | 'active' | 'paused' | 'sold' | 'unsold'

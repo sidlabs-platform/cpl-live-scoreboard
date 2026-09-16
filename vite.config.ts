@@ -21,6 +21,11 @@ export default defineConfig(({ mode }) => {
       setupFiles: './src/test/setup.ts',
       css: true,
       restoreMocks: true,
+      // Fork workers time out on the supported local Node runtime.
+      pool: 'threads',
+      fileParallelism: false,
+      maxWorkers: 1,
+      minWorkers: 1,
     },
   }
 })
