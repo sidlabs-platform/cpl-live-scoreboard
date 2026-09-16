@@ -118,4 +118,21 @@ describe('fetchRoomFeed', () => {
       code: 'invalid-response',
     })
   })
+
+  it('preserves the producer error and HTTP status from a domain failure', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ ok: false, error: 'Room is closed' }), {
+        status: 409,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    )
+
+    await expect(
+      fetchRoomFeed('CPL123', { fixtureMode: false, fetchImpl }),
+    ).rejects.toMatchObject({
+      code: 'producer-error',
+      message: 'Room is closed',
+      status: 409,
+    })
+  })
 })

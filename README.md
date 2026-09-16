@@ -27,6 +27,11 @@ GET /api/rooms/:roomCode/public-feed
 
 Vite's proxy is a development convenience. A production deployment must route `/api` to the Code Premier League producer with the same path.
 
+The consumer is aligned with the finalized public-feed contract merged in
+[Code-Premier-League PR #11](https://github.com/sidlabs-platform/Code-Premier-League/pull/11).
+The documented sample room is `CPL123`; fixture mode keeps the local `LIVE24`
+scenario for deterministic UI development.
+
 ## Fixture desk
 
 Use either the environment flag or the runtime query parameter:
